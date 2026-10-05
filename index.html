@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="uz">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Salomatlik yo'lboshchisi</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<style>
+:root{--bg:#F2F6F6;--card:#fff;--ink:#14323A;--mute:#5F7880;--line:#D9E4E6;--accent:#0B7A85;--on-accent:#fff;--green:#2E9E5B;--yellow:#D9A000;--red:#D64545;--me:#DDEFF1}
+[data-theme="dark"]{--bg:#0F1C20;--card:#17292F;--ink:#E6F0F2;--mute:#8FA8AE;--line:#27404A;--accent:#35B6C2;--on-accent:#06242A;--me:#1E3B43}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{background:var(--bg);color:var(--ink);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;display:flex;flex-direction:column;padding-top:env(safe-area-inset-top,0px)}
+button,input,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.hidden{display:none!important}
+
+header{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid var(--line)}
+header h1{font-size:18px;margin:0;font-weight:650;letter-spacing:-.01em}
+.icon-btn{background:none;border:0;font-size:22px;padding:4px 10px;border-radius:8px}
+#menu{position:absolute;right:12px;top:calc(env(safe-area-inset-top,0px) + 52px);background:var(--card);border:1px solid var(--line);border-radius:12px;padding:6px;z-index:5;min-width:220px}
+#menu button{display:block;width:100%;text-align:left;background:none;border:0;padding:12px;border-radius:8px}
+#menu button:active{background:var(--bg)}
+
+/* onboarding */
+#onboard{flex:1;overflow:auto;padding:24px 20px calc(24px + env(safe-area-inset-bottom,0px));max-width:480px;width:100%;margin:0 auto}
+#onboard h2{font-size:26px;line-height:1.2;margin:8px 0 8px;letter-spacing:-.02em}
+#onboard p{color:var(--mute);margin:0 0 20px}
+label.f{display:block;font-weight:600;margin:16px 0 6px}
+input[type=text],input[type=number]{width:100%;padding:13px 14px;border-radius:12px;border:1px solid var(--line);background:var(--card)}
+.seg{display:flex;gap:8px}
+.seg button{flex:1;padding:13px;border-radius:12px;border:1px solid var(--line);background:var(--card)}
+.seg button[aria-pressed=true]{background:var(--accent);color:var(--on-accent);border-color:var(--accent);font-weight:600}
+.consent{display:flex;gap:10px;align-items:flex-start;margin:20px 0;color:var(--mute);font-size:14px}
+.consent input{margin-top:4px;width:20px;height:20px;flex:none}
+.primary{width:100%;padding:15px;border:0;border-radius:14px;background:var(--accent);color:var(--on-accent);font-weight:650}
+.primary:disabled{opacity:.5}
+#err{color:var(--red);min-height:22px;margin-top:10px;font-size:14px}
+
+/* chat */
+#chat{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12px;scroll-behavior:smooth}
+.m{max-width:86%;padding:11px 14px;border-radius:16px;white-space:pre-wrap;word-wrap:break-word}
+.m.bot{background:var(--card);border:1px solid var(--line);border-bottom-left-radius:4px;align-self:flex-start}
+.m.me{background:var(--me);border-bottom-right-radius:4px;align-self:flex-end}
+.m.wait{color:var(--mute)}
+.m.err{color:var(--red)}
+.signal{align-self:flex-start;display:flex;gap:12px;align-items:center;max-width:92%;padding:12px 14px;border-radius:14px;border:1.5px solid var(--c);background:var(--card)}
+.signal i{width:14px;height:14px;border-radius:50%;background:var(--c);flex:none;box-shadow:0 0 0 5px color-mix(in srgb,var(--c) 22%,transparent)}
+.signal a{color:inherit;font-weight:650}
+.docbtn{align-self:flex-start;padding:11px 16px;border-radius:12px;border:1.5px solid var(--accent);background:none;color:var(--accent);font-weight:650}
+.docs{align-self:stretch;display:flex;flex-direction:column;gap:8px}
+.doc{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 14px;display:grid;grid-template-columns:1fr auto;gap:2px 12px}
+.doc b{font-weight:650}
+.doc small{color:var(--mute)}
+.doc a{grid-row:1/3;grid-column:2;align-self:center;padding:10px 14px;border-radius:10px;background:var(--accent);color:var(--on-accent);text-decoration:none;font-weight:600}
+.demo{color:var(--mute);font-size:13px}
+
+footer{padding:8px 12px calc(10px + env(safe-area-inset-bottom,0px));border-top:1px solid var(--line);background:var(--bg)}
+#chips{display:flex;gap:8px;overflow-x:auto;padding-bottom:8px}
+#chips button{flex:none;padding:8px 14px;border-radius:999px;border:1px solid var(--line);background:var(--card)}
+.row{display:flex;gap:8px;align-items:flex-end}
+textarea{flex:1;resize:none;max-height:120px;padding:12px 14px;border-radius:14px;border:1px solid var(--line);background:var(--card)}
+#send{padding:12px 18px;border:0;border-radius:14px;background:var(--accent);color:var(--on-accent);font-weight:650}
+#send:disabled{opacity:.5}
+.note{font-size:12px;color:var(--mute);margin:8px 2px 0}
+@media (prefers-reduced-motion:reduce){#chat{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<header>
+  <h1>Salomatlik yo'lboshchisi</h1>
+  <button class="icon-btn" id="menuBtn" aria-label="Menyu">⋯</button>
+</header>
+<div id="menu" class="hidden">
+  <button id="clearChat">Suhbatni tozalash</button>
+  <button id="wipe">Ma'lumotlarimni o'chirish</button>
+</div>
+
+<section id="onboard" class="hidden">
+  <h2>Avval tanishib olaylik</h2>
+  <p>Javoblar yoshingiz va jinsingizga moslanadi. Bu ma'lumot faqat shu telefoningizda saqlanadi.</p>
+  <label class="f" for="name">Ismingiz</label>
+  <input type="text" id="name" autocomplete="given-name" maxlength="40">
+  <label class="f" for="age">Yoshingiz</label>
+  <input type="number" id="age" inputmode="numeric" min="1" max="120">
+  <label class="f" id="gl">Jinsingiz</label>
+  <div class="seg" role="group" aria-labelledby="gl">
+    <button type="button" data-g="erkak" aria-pressed="false">Erkak</button>
+    <button type="button" data-g="ayol" aria-pressed="false">Ayol</button>
+  </div>
+  <label class="consent"><input type="checkbox" id="ok"><span>Bu ilova tashxis qo'ymasligini, faqat yo'nalish va ma'lumot berishini tushundim. Shoshilinch holatda 103 ga qo'ng'iroq qilaman.</span></label>
+  <button class="primary" id="start" disabled>Boshlash</button>
+  <div id="err" role="alert"></div>
+</section>
+
+<main id="chat" class="hidden" aria-live="polite"></main>
+<footer id="foot" class="hidden">
+  <div id="chips"></div>
+  <div class="row">
+    <textarea id="input" rows="1" placeholder="Nima bezovta qilyapti?"></textarea>
+    <button id="send">Yuborish</button>
+  </div>
+  <p class="note">Bu tashxis emas. Shoshilinch holatda 103.</p>
+</footer>
+
+<script>
+const tg = window.Telegram && window.Telegram.WebApp;
+if (tg) { tg.ready(); tg.expand(); }
+document.documentElement.dataset.theme = (tg && tg.colorScheme) || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+
+const $ = (s) => document.querySelector(s);
+const LABEL = { urolog:"Urolog", ginekolog:"Ginekolog", venerolog:"Venerolog", terapevt:"Terapevt", kardiolog:"Kardiolog", nevrolog:"Nevrolog", gastroenterolog:"Gastroenterolog", dermatolog:"Dermatolog", endokrinolog:"Endokrinolog", lor:"LOR", oftalmolog:"Oftalmolog", ortoped:"Ortoped", pediatr:"Pediatr", psixiatr:"Psixiatr", stomatolog:"Stomatolog" };
+const SIGNAL = {
+  green: ["var(--green)", "Shoshilinch emas. Rejali qabulga yoziling."],
+  yellow: ["var(--yellow)", "1-2 kun ichida shifokorga boring."],
+  red: ["var(--red)", "Hoziroq yordam kerak. 103 ga qo'ng'iroq qiling yoki shoshilinch yordamga boring."],
+};
+let profile = null, history = [], busy = false, gender = null;
+try { profile = JSON.parse(localStorage.getItem("mb_profile")); } catch (e) {}
+
+function show() {
+  const ready = !!profile;
+  $("#onboard").classList.toggle("hidden", ready);
+  $("#chat").classList.toggle("hidden", !ready);
+  $("#foot").classList.toggle("hidden", !ready);
+  if (ready) startChat(); else {
+    const u = tg && tg.initDataUnsafe && tg.initDataUnsafe.user;
+    if (u && u.first_name && !$("#name").value) $("#name").value = u.first_name;
+  }
+}
+
+/* onboarding */
+document.querySelectorAll(".seg button").forEach((b) => b.onclick = () => {
+  gender = b.dataset.g;
+  document.querySelectorAll(".seg button").forEach((x) => x.setAttribute("aria-pressed", x === b));
+  check();
+});
+function check() {
+  const age = parseInt($("#age").value, 10);
+  $("#start").disabled = !($("#name").value.trim() && age >= 1 && age <= 120 && gender && $("#ok").checked);
+}
+["name", "age", "ok"].forEach((id) => $("#" + id).addEventListener("input", check));
+$("#start").onclick = () => {
+  profile = { name: $("#name").value.trim(), age: parseInt($("#age").value, 10), gender };
+  try { localStorage.setItem("mb_profile", JSON.stringify(profile)); } catch (e) {}
+  show();
+};
+
+/* chat */
+function add(cls, text) {
+  const d = document.createElement("div");
+  d.className = "m " + cls;
+  d.textContent = text;
+  $("#chat").appendChild(d);
+  d.scrollIntoView({ block: "end" });
+  return d;
+}
+function startChat() {
+  $("#chat").innerHTML = ""; history = [];
+  add("bot", profile.name + ", assalomu alaykum. Qaysi shifokor kerak yoki nima bezovta qilyapti?");
+  const chips = { "Urolog": "Menga urolog kerak", "Ginekolog": "Menga ginekolog kerak", "Terapevt": "Menga terapevt kerak", "Tahlilni tushuntirish": "Tahlil natijalarimni tushuntirib bering" };
+  $("#chips").innerHTML = "";
+  for (const k in chips) { const b = document.createElement("button"); b.textContent = k; b.onclick = () => send(chips[k]); $("#chips").appendChild(b); }
+}
+async function api(path, opts = {}) {
+  const r = await fetch(path, { ...opts, headers: { "content-type": "application/json", "x-init-data": (tg && tg.initData) || "" } });
+  const d = await r.json();
+  if (!r.ok) throw new Error(d.error || "Xatolik");
+  return d;
+}
+async function send(text) {
+  text = (text || "").trim();
+  if (!text || busy) return;
+  busy = true; $("#send").disabled = true; $("#chips").classList.add("hidden");
+  $("#input").value = ""; $("#input").style.height = "auto";
+  add("me", text); history.push({ role: "user", content: text });
+  const wait = add("bot wait", "Yozmoqda…");
+  try {
+    const d = await api("/api/chat", { method: "POST", body: JSON.stringify({ profile: { age: profile.age, gender: profile.gender }, messages: history }) });
+    wait.remove(); render(d); history.push({ role: "assistant", content: d.reply });
+  } catch (e) {
+    wait.textContent = e.message; wait.className = "m bot err"; history.pop();
+  }
+  busy = false; $("#send").disabled = false;
+}
+function render(d) {
+  add("bot", d.reply);
+  if (d.urgency) {
+    const [c, t] = SIGNAL[d.urgency];
+    const s = document.createElement("div");
+    s.className = "signal"; s.style.setProperty("--c", c);
+    s.innerHTML = "<i></i><span></span>"; s.querySelector("span").textContent = t;
+    if (d.urgency === "red") { const a = document.createElement("a"); a.href = "tel:103"; a.textContent = " Qo'ng'iroq: 103"; s.querySelector("span").appendChild(a); }
+    $("#chat").appendChild(s); s.scrollIntoView({ block: "end" });
+  }
+  if (d.specialist) {
+    const b = document.createElement("button");
+    b.className = "docbtn"; b.textContent = "Mos shifokorlar: " + LABEL[d.specialist];
+    b.onclick = () => showDoctors(d.specialist, b);
+    $("#chat").appendChild(b); b.scrollIntoView({ block: "end" });
+  }
+}
+async function showDoctors(spec, btn) {
+  btn.disabled = true;
+  try {
+    const list = await api("/api/doctors?specialty=" + encodeURIComponent(spec));
+    const wrap = document.createElement("div"); wrap.className = "docs";
+    if (!list.length) wrap.textContent = "Bu mutaxassis bo'yicha hozircha shifokor qo'shilmagan.";
+    list.forEach((x) => {
+      const c = document.createElement("div"); c.className = "doc";
+      const n = document.createElement("b"); n.textContent = x.name;
+      const i = document.createElement("small"); i.textContent = x.clinic + ", " + x.city + " · ★ " + x.rating + " · " + Number(x.price).toLocaleString("ru-RU") + " so'm";
+      const a = document.createElement("a"); a.href = "tel:" + x.phone.replace(/\s/g, ""); a.textContent = "Qo'ng'iroq";
+      c.append(n, i, a);
+      if (x.demo) { const m = document.createElement("span"); m.className = "demo"; m.textContent = "Namuna ma'lumot"; c.append(m); }
+      wrap.appendChild(c);
+    });
+    btn.replaceWith(wrap); wrap.scrollIntoView({ block: "end" });
+  } catch (e) { btn.disabled = false; add("bot err", e.message); }
+}
+
+$("#send").onclick = () => send($("#input").value);
+$("#input").addEventListener("input", (e) => { e.target.style.height = "auto"; e.target.style.height = e.target.scrollHeight + "px"; });
+
+/* menu */
+$("#menuBtn").onclick = () => $("#menu").classList.toggle("hidden");
+$("#clearChat").onclick = () => { $("#menu").classList.add("hidden"); if (profile) startChat(); $("#chips").classList.remove("hidden"); };
+$("#wipe").onclick = () => {
+  $("#menu").classList.add("hidden");
+  try { localStorage.removeItem("mb_profile"); } catch (e) {}
+  profile = null; history = []; gender = null; $("#age").value = ""; $("#ok").checked = false;
+  document.querySelectorAll(".seg button").forEach((x) => x.setAttribute("aria-pressed", "false"));
+  check(); show();
+};
+show();
+</script>
+</body>
+</html>
