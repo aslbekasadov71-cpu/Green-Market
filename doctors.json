@@ -1,0 +1,8 @@
+[
+  { "name": "Namuna Shifokor 1", "specialty": "urolog", "clinic": "Namuna klinika A", "city": "Toshkent", "rating": 4.9, "price": 150000, "phone": "+998 90 000 00 01", "demo": true },
+  { "name": "Namuna Shifokor 2", "specialty": "urolog", "clinic": "Namuna klinika B", "city": "Toshkent", "rating": 4.7, "price": 120000, "phone": "+998 90 000 00 02", "demo": true },
+  { "name": "Namuna Shifokor 3", "specialty": "ginekolog", "clinic": "Namuna klinika A", "city": "Toshkent", "rating": 4.8, "price": 130000, "phone": "+998 90 000 00 03", "demo": true },
+  { "name": "Namuna Shifokor 4", "specialty": "ginekolog", "clinic": "Namuna klinika C", "city": "Toshkent", "rating": 4.6, "price": 110000, "phone": "+998 90 000 00 04", "demo": true },
+  { "name": "Namuna Shifokor 5", "specialty": "terapevt", "clinic": "Namuna klinika B", "city": "Toshkent", "rating": 4.8, "price": 90000, "phone": "+998 90 000 00 05", "demo": true },
+  { "name": "Namuna Shifokor 6", "specialty": "terapevt", "clinic": "Namuna klinika C", "city": "Toshkent", "rating": 4.5, "price": 80000, "phone": "+998 90 000 00 06", "demo": true }
+]
